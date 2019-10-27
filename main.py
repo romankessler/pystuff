@@ -25,6 +25,15 @@ class Feld:
         else:
             print('[  ]', end='' ) 
             
+    def printFieldHitState(self):
+        if self.hatSchiff == 1:
+            if self.istGetroffen == 1:
+                print('[x]', end='' )
+            else:
+                print('[  ]', end='' ) 
+        else:
+            print('[  ]', end='' ) 
+            
 
 class Brett:
     felder:[[Feld]]
@@ -52,13 +61,36 @@ class Brett:
         feld = self. getFeld(row, column) 
         if feld.hatSchiff:
             feld.istGetroffen = 1
-    
+            print('getroffen!!') 
+        else:
+            print('verfehlt...') 
+            
+    def getSchiffe(self):
+        schiffe = []
+        for row in self.felder:
+            for f in row:
+                if f.hatSchiff == 1:
+                    schiffe.append(f)
+        return schiffe
+            
+    def getSindAlleSchiffeZerstört(self):
+        schiffe = self.getSchiffe()
+        return all(schiff.istGetroffen == 1 for schiff in schiffe) 
+        
     def printSpielBrett(self):
         for row in self.felder:
             for f in row:
                 f.printFieldState()
             print() 
+    
+    def printSpielBrettTreffer(self):
+        for row in self.felder:
+            for f in row:
+                f.printFieldHitState()
+            print() 
   
+import os
+
 class Spiel:
     brett1:Brett
     brett2:Brett
@@ -67,16 +99,62 @@ class Spiel:
         self.brett1 = Brett(size) 
         self.brett2 = Brett(size) 
         
+    def printContinue(self):
+        input('press enter to continue') 
+        
+    def printTitle(self):
+        print('==============================') 
+        print('SCHIFFE VERSENKEN') 
+        print('==============================')
+    
+    def clear(self):
+        os.system('clear')
+        self.printTitle() 
+        
+    def zugSpieler1(self):
+        if self.brett1.getSindAlleSchiffeZerstört():
+            print('Spieler 1 hat verloren') 
+            return False
+        else:
+            self.clear() 
+            self.brett2.printSpielBrettTreffer()
+            print('Spieler 1: Position für Beschuss angeben')
+            row = input('Zeile:') 
+            column = input('Spalte')
+            self.brett2.beschiessen(int(row),int(column))
+            self.brett2.printSpielBrettTreffer()
+            self.printContinue()
+            return True
+        
+    def zugSpieler2(self):
+        if self.brett2.getSindAlleSchiffeZerstört():
+            print('Spieler 2 hat verloren') 
+            return False
+        else:
+            self.clear() 
+            self.brett1.printSpielBrettTreffer()
+            print('Spieler 2: Position für Beschuss angeben')
+            row = input('Zeile:') 
+            column = input('Spalte')
+            self.brett1.beschiessen(int(row),int(column))
+            self.brett1.printSpielBrettTreffer()
+            self.printContinue()
+            return True
+        
     def start(self):
         self.brett1.schiffPlatzieren(1,1)
         self.brett1.schiffPlatzieren(2,2)
         self.brett1.schiffPlatzieren(3,1)
+        self.brett2.schiffPlatzieren(1,1)
+        self.brett2.schiffPlatzieren(2,2)
+        self.brett2.schiffPlatzieren(3,1)
         self.brett1.printSpielBrett() 
-        print('Position für Beschuss angeben')
-        row = input('Zeile:') 
-        column = input('Spalte')
-        self.brett1.beschiessen(int(row),int(column)) 
-        self.brett1.printSpielBrett()
+        s1hatSchiffe = 1
+        s2hatSchiffe = 1
+        while s1hatSchiffe == 1 and s2hatSchiffe == 1:
+            s1hatSchiffe = self.zugSpieler1()
+            s2hatSchiffe = self.zugSpieler2()
+        print('Spiel beendet') 
 
 spiel = Spiel(4)
 spiel.start()

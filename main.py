@@ -35,7 +35,6 @@ class Brett:
             self.felder.append([])
             for col in range(size):
                 self.felder[line].append(Feld(0,0))
-        
     
     def printSpielfeld(self):
         for row in self.felder:
@@ -43,11 +42,19 @@ class Brett:
                 f.printFieldState()
             print() 
   
+class Spiel:
+    brett1:Brett
+    brett2:Brett
     
+    def __init__(self, size:int):
+        self.brett1 = Brett(size) 
+        self.brett2 = Brett(size) 
         
+    def start(self):
+        self.brett1.printSpielfeld() 
 
-brett = Brett(5) 
-brett.printSpielfeld() 
+spiel = Spiel(4)
+spiel.start()
 
 #testfeld = Feld(1,0) 
 #testfeld.printFieldState()

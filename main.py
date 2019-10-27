@@ -29,12 +29,13 @@ class Feld:
 class Brett:
     felder:[[Feld]]
     
-    def __init__(self):
-        self.felder = [[], []] 
-        self.felder[0].append(Feld(0,0))
-        self.felder[0].append(Feld(0,0))
-        self.felder[1].append(Feld(0,0))
-        self.felder[1].append(Feld(0,0))
+    def __init__(self, size:int):
+        self.felder = [] 
+        for line in range(size):
+            self.felder.append([])
+            for col in range(size):
+                self.felder[line].append(Feld(0,0))
+        
     
     def printSpielfeld(self):
         for row in self.felder:
@@ -45,7 +46,7 @@ class Brett:
     
         
 
-brett = Brett() 
+brett = Brett(5) 
 brett.printSpielfeld() 
 
 #testfeld = Feld(1,0) 

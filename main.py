@@ -90,6 +90,7 @@ class Brett:
             print() 
   
 import os
+import sys
 
 class Spiel:
     brett1:Brett
@@ -102,41 +103,48 @@ class Spiel:
     def printContinue(self):
         input('press enter to continue') 
         
-    def printTitle(self):
+    def printTitle(self, title):
         print('==============================') 
-        print('SCHIFFE VERSENKEN') 
+        print(title) 
         print('==============================')
     
     def clear(self):
         os.system('clear')
-        self.printTitle() 
+        
+    def printWin(self):
+        self.printTitle('YOU WIN') 
+        
+    def printLoose(self):
+        self.printTitle('GAME OVER') 
         
     def zugSpieler1(self):
         if self.brett1.getSindAlleSchiffeZerstört():
-            print('Spieler 1 hat verloren') 
+            print('Spieler 1: keine Schiffe... ') 
             return False
         else:
-            self.clear() 
+            self.clear()
+            self.printTitle('Spieler 1')
             self.brett2.printSpielBrettTreffer()
             print('Spieler 1: Position für Beschuss angeben')
-            row = input('Zeile:') 
-            column = input('Spalte')
-            self.brett2.beschiessen(int(row),int(column))
+            row = int(input('Zeile:')) 
+            column = int(input('Spalte')) 
+            self.brett2.beschiessen(row, column)
             self.brett2.printSpielBrettTreffer()
             self.printContinue()
             return True
         
     def zugSpieler2(self):
         if self.brett2.getSindAlleSchiffeZerstört():
-            print('Spieler 2 hat verloren') 
+            print('Spieler 2: keine Schiffe... ') 
             return False
         else:
             self.clear() 
+            self.printTitle('Spieler 2')
             self.brett1.printSpielBrettTreffer()
             print('Spieler 2: Position für Beschuss angeben')
-            row = input('Zeile:') 
-            column = input('Spalte')
-            self.brett1.beschiessen(int(row),int(column))
+            row = int(input('Zeile:')) 
+            column = int(input('Spalte')) 
+            self.brett1.beschiessen(row, column)
             self.brett1.printSpielBrettTreffer()
             self.printContinue()
             return True
@@ -154,7 +162,15 @@ class Spiel:
         while s1hatSchiffe == 1 and s2hatSchiffe == 1:
             s1hatSchiffe = self.zugSpieler1()
             s2hatSchiffe = self.zugSpieler2()
-        print('Spiel beendet') 
+        self.printContinue()
+        self.clear()
+        
+        if s1hatSchiffe == 1:
+            self.printWin()
+        else:
+            self.printLoose()
+        self.printContinue()
+        sys.exit(0) 
 
 spiel = Spiel(4)
 spiel.start()

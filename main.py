@@ -27,18 +27,20 @@ class Feld:
             
 
 class Brett:
-    felder:[Feld] 
+    felder:[[Feld]]
     
     def __init__(self):
-        self.felder = []
-        self.felder.append(Feld(1,0))
-        self.felder.append(Feld(0,0))
-        self.felder.append(Feld(0,0))
-        self.felder.append(Feld(0,0))
+        self.felder = [[], []] 
+        self.felder[0].append(Feld(0,0))
+        self.felder[0].append(Feld(0,0))
+        self.felder[1].append(Feld(0,0))
+        self.felder[1].append(Feld(0,0))
     
     def printSpielfeld(self):
-        for f in self.felder:
-       			f.printFieldState()
+        for row in self.felder:
+            for f in row:
+                f.printFieldState()
+            print() 
   
     
         

@@ -35,8 +35,25 @@ class Brett:
             self.felder.append([])
             for col in range(size):
                 self.felder[line].append(Feld(0,0))
+                
+    def getFeld(self, row:int, column:int):
+        feld = self.felder[row][column]
+        return feld
+        
+    def schiffPlatzieren(self, row:int, column:int):
+        feld = self.getFeld(row,column)
+        feld.hatSchiff = 1
+        
+    def getHatSchiff(self, row:int, column:int):
+        feld = self.getFeld(row,column)
+        return feld.hatSchiff
     
-    def printSpielfeld(self):
+    def beschiessen(self, row:int, column:int):
+        feld = self. getFeld(row, column) 
+        if feld.hatSchiff:
+            feld.istGetroffen = 1
+    
+    def printSpielBrett(self):
         for row in self.felder:
             for f in row:
                 f.printFieldState()
@@ -51,7 +68,15 @@ class Spiel:
         self.brett2 = Brett(size) 
         
     def start(self):
-        self.brett1.printSpielfeld() 
+        self.brett1.schiffPlatzieren(1,1)
+        self.brett1.schiffPlatzieren(2,2)
+        self.brett1.schiffPlatzieren(3,1)
+        self.brett1.printSpielBrett() 
+        print('Position für Beschuss angeben')
+        row = input('Zeile:') 
+        column = input('Spalte')
+        self.brett1.beschiessen(int(row),int(column)) 
+        self.brett1.printSpielBrett()
 
 spiel = Spiel(4)
 spiel.start()

@@ -19,27 +19,32 @@ class Feld:
     def printFieldState(self):
         if self.hatSchiff == 1:
             if self.istGetroffen == 1:
-                print('[x]')
+                print('[x]', end='' )
             else:
-                print('[o]') 
+                print('[o]', end='' ) 
         else:
-            print('[  ]') 
+            print('[  ]', end='' ) 
             
 
 class Brett:
-    felder:Feld[] 
+    felder:[Feld] 
     
     def __init__(self):
-        self.felder = Feld[5] 
+        self.felder = []
+        self.felder.append(Feld(1,0))
+        self.felder.append(Feld(0,0))
+        self.felder.append(Feld(0,0))
+        self.felder.append(Feld(0,0))
     
     def printSpielfeld(self):
-        for f in self.felder
+        for f in self.felder:
        			f.printFieldState()
   
     
         
 
 brett = Brett() 
+brett.printSpielfeld() 
 
 #testfeld = Feld(1,0) 
 #testfeld.printFieldState()
